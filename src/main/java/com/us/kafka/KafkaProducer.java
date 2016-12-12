@@ -26,7 +26,7 @@ public class KafkaProducer extends Thread{
 	        Producer producer = createProducer();  
 	        int i=0;  
 	        while(i<=i+10000){  
-	            producer.send(new KeyedMessage<Integer, String>(topic, "message: 我是第" + i+++"条信息"));  
+	            producer.send(new KeyedMessage<Integer, String>(topic, "message: 我是第" + i+"条信息"+System.currentTimeMillis()));  
 	            try {  
 	                TimeUnit.SECONDS.sleep(1);  
 	            } catch (InterruptedException e) {  
