@@ -1,5 +1,4 @@
-package com.us.kafka;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
+package com.us.kafka.Stream;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
@@ -9,6 +8,8 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.KeyValueMapper;
 import org.apache.kafka.streams.kstream.ValueMapper;
+
+import com.us.kafka.KafkaConfig;
 
 import java.util.Arrays;
 import java.util.Locale;
