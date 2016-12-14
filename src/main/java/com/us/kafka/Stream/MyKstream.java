@@ -1,7 +1,6 @@
 package com.us.kafka.Stream;
 
 import java.util.Arrays;
-
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
@@ -12,12 +11,8 @@ import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.KeyValueMapper;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.apache.kafka.streams.kstream.ValueMapper;
-
 import com.us.kafka.KafkaConfig;
-
 import java.util.Properties;
-import java.util.regex.Pattern;
-
 import static org.apache.kafka.common.serialization.Serdes.String;
 
 /**
@@ -28,23 +23,21 @@ public class MyKstream {
     public static void main(String[] args) {
 
         KStreamBuilder builder = new KStreamBuilder();
-        filterWordCount(builder);
-//        lambdaFilter(builder);
-
-
-
-//        // Add shutdown hook to respond to SIGTERM and gracefully close Kafka Streams
+//        filterWordCount(builder);
+        lambdaFilter(builder);
+        KafkaStreams ks = new KafkaStreams(builder, init());
+        ks.start();
 //        Runtime.getRuntime().addShutdownHook(new Thread(ks::close));
     }
 
     public static Properties init() {
         Properties properties = new Properties();
-        properties.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "MyWordCount");
+        properties.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "MyKstream2");
         properties.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConfig.metadata_broker_list);
         properties.setProperty(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, KafkaConfig.zookeeper);
         properties.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, String().getClass().getName());
         properties.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, String().getClass().getName());
-//        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return properties;
     }
 
@@ -75,9 +68,6 @@ public class MyKstream {
         }).countByKey("us");
         count.print();
 //        count.to(KafkaConfig.Consumer__Topic);
-        KafkaStreams ks = new KafkaStreams(builder, init());
-        ks.start();
-
     }
 
     private static void lambdaFilter(KStreamBuilder builder) {
@@ -90,10 +80,6 @@ public class MyKstream {
 //				.through("RekeyedIntermediateTopic")
                 .countByKey("Counts")
                 .toStream().print();
-
-        KafkaStreams ks = new KafkaStreams(builder, init());
-        ks.start();
-
     }
 
 
