@@ -13,8 +13,9 @@ public class Client {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		KafkaProducer.creatProducer(KafkaConfig.Producer_Topic);
-//		KafkaConsumer.creatConsumer(KafkaConfig.Consumer__Topic);
+//		KafkaProducerDemo.creatKafkaProducer(KafkaConfig.Producer_Topic);
+//		KafkaOldProducer.creatProducer(KafkaConfig.Producer_Topic);
+		KafkaConsumer.creatConsumer(KafkaConfig.Consumer__Topic);
 	}
 
 }
