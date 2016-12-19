@@ -25,7 +25,6 @@ public class KafkaProducerDemo extends Thread {
         Producer<String, String> producer = getKafkaProducer();
         for (int i = 0; i < 10000; i++) {
             producer.send(new ProducerRecord<>(topicName, "message: 我是KafkaProducerDemo第" + i + "条信息 abel"));
-            System.out.println();
             try {
                 TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {

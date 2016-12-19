@@ -1,6 +1,7 @@
 package com.us.kafka.Stream;
 
 import java.util.Arrays;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
@@ -12,7 +13,9 @@ import org.apache.kafka.streams.kstream.KeyValueMapper;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.apache.kafka.streams.kstream.ValueMapper;
 import com.us.kafka.KafkaConfig;
+
 import java.util.Properties;
+
 import static org.apache.kafka.common.serialization.Serdes.String;
 
 /**
@@ -22,17 +25,21 @@ import static org.apache.kafka.common.serialization.Serdes.String;
 public class MyKstream {
     public static void main(String[] args) {
 
-        KStreamBuilder builder = new KStreamBuilder();
+        //tow instances
+        KStreamBuilder instances = new KStreamBuilder();
 //        filterWordCount(builder);
-        lambdaFilter(builder);
-        KafkaStreams ks = new KafkaStreams(builder, init());
+        lambdaFilter(instances);
+        KStreamBuilder instances2 = new KStreamBuilder();
+        lambdaFilter(instances2);
+
+        KafkaStreams ks = new KafkaStreams(instances2, init());
         ks.start();
 //        Runtime.getRuntime().addShutdownHook(new Thread(ks::close));
     }
 
     public static Properties init() {
         Properties properties = new Properties();
-        properties.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "MyKstream2");
+        properties.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "MyKstream");
         properties.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConfig.metadata_broker_list);
         properties.setProperty(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, KafkaConfig.zookeeper);
         properties.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, String().getClass().getName());
@@ -65,7 +72,7 @@ public class MyKstream {
                 return new KeyValue<String, String>(value + "--read", value);
             }
 
-        }).countByKey("us");
+        }).groupByKey().count("us");
         count.print();
 //        count.to(KafkaConfig.Consumer__Topic);
     }
@@ -73,13 +80,14 @@ public class MyKstream {
     private static void lambdaFilter(KStreamBuilder builder) {
         KStream<String, String> textLines = builder.stream(KafkaConfig.Producer_Topic);
 //		Pattern pattern = Pattern.compile("\\W+", Pattern.UNICODE_CHARACTER_CLASS);
-                textLines
+        textLines
                 .flatMapValues(value -> Arrays.asList(value.split(" ")))
                 .map((key, word) -> new KeyValue<>(word, word))
-                .filter((k,v)->(!k.contains("message")))
+                .filter((k, v) -> (!k.contains("message")))
 //				.through("RekeyedIntermediateTopic")
-                .countByKey("Counts")
-                .toStream().print();
+                .groupByKey().count("us").print();
+        System.out.println("-----------2-----------");
+
     }
 
 

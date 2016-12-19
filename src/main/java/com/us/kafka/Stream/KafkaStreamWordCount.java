@@ -50,7 +50,8 @@ public class KafkaStreamWordCount {
                         return new KeyValue<String, String>(value, value+"--read");
                     }
                 })
-                .countByKey("Counts");
+                .groupByKey().count("cunts");
+//                .countByKey("Counts");
        
         counts.print();
 //        counts.to(String(), Long(), "abel2");

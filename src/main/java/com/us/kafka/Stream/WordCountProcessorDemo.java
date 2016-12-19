@@ -43,7 +43,7 @@ public class WordCountProcessorDemo {
 
                     for (String word : words) {
                         Integer oldValue = this.kvStore.get(word);
-
+                        System.out.println(words);
                         if (oldValue == null) {
                             this.kvStore.put(word, 1);
                         } else {
@@ -95,7 +95,7 @@ public class WordCountProcessorDemo {
         builder.addProcessor("Process", new MyProcessorSupplier(), "Source");
         builder.addStateStore(Stores.create("Counts").withStringKeys().withIntegerValues().inMemory().build(), "Process");
 
-        builder.addSink("Sink", "streams-wordcount-processor-output", "Process");
+//        builder.addSink("Sink", KafkaConfig.Consumer__Topic, "Process");
 
         KafkaStreams streams = new KafkaStreams(builder, props);
         streams.start();
