@@ -14,6 +14,7 @@ import org.apache.kafka.streams.state.Stores;
 
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import static org.apache.kafka.common.serialization.Serdes.*;
 
@@ -49,6 +50,12 @@ public class WordCountProcessorDemo {
                         } else {
                             this.kvStore.put(word, oldValue + 1);
                         }
+                        try {
+                            TimeUnit.SECONDS.sleep(2);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     context.commit();
@@ -56,13 +63,14 @@ public class WordCountProcessorDemo {
 
                 @Override
                 public void punctuate(long timestamp) {
+
                     try (KeyValueIterator<String, Integer> iter = this.kvStore.all()) {
                         System.out.println("----------- " + timestamp + " ----------- ");
 
                         while (iter.hasNext()) {
                             KeyValue<String, Integer> entry = iter.next();
 
-                            System.out.println("[" + entry.key + ", " + entry.value + "]");
+//                            System.out.println("[" + entry.key + ", " + entry.value + "]");
 
                             context.forward(entry.key, entry.value.toString());
                         }
@@ -102,7 +110,7 @@ public class WordCountProcessorDemo {
 
         // usually the stream application would be running forever,
         // in this example we just let it run for some time and stop since the input data is finite.
-        Thread.sleep(5000L);
+//        Thread.sleep(50000L);
 
 //        streams.close();
     }
