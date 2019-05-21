@@ -8,7 +8,7 @@ object WordCount {
     val conf = new SparkConf().setAppName("WordCount")
     conf.setMaster("local")
     val sc = new SparkContext(conf)
-    val rdd = sc.textFile("./input/readme.md")
+    val rdd = sc.textFile("./spark/mySpark/input/readText.md")
     rdd.cache();
     //reduceByKey
     val wordCount = rdd.flatMap(_.split(' ')).map((_, 1)).reduceByKey(_ + _)

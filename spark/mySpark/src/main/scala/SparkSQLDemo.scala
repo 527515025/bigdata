@@ -79,7 +79,7 @@ object SparkSQLDemo {
     //    case class 可以嵌套，也可以包含复合类型，比如 Seqs 或 Arrays。
     //    元素为 case class 的 RDD 可以转换成 DataFrame 并可以注册为表进而执行 sql 语句查询。
 
-    val txtDF = spark.sparkContext.textFile("./input/people.txt").map(_.split(",")).map(x => Person(x(0), x(1).trim.toInt)).toDF()
+    val txtDF = spark.sparkContext.textFile("./spark/mySpark/input/people.txt").map(_.split(",")).map(x => Person(x(0), x(1).trim.toInt)).toDF()
     txtDF.createTempView("user")
 
     println("---------------------21------------------")
@@ -104,7 +104,7 @@ object SparkSQLDemo {
     //    将原始 RDD 转换为 Row RDD
     //    根据步骤1中的 Row 的结构创建对应的 StructType 模式
     //    通过 SparkSession 提供的 createDataFrame 来把第2步创建的模式应用到第一步转换得到的 Row RDD
-    val userRDD = spark.sparkContext.textFile("./input/people.txt")
+    val userRDD = spark.sparkContext.textFile("./spark/mySpark/input/people.txt")
     val schemaString = "name age"
     val filed = schemaString.split(" ").map(filedName => StructField(filedName, StringType, nullable = true))
     val schema = StructType(filed)

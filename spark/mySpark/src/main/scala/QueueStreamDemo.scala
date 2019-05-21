@@ -27,7 +27,7 @@ object QueueStreamDemo {
     val reducedStream = mappedStream.reduceByKey(_ + _)
       .map(x => (x._2, x._1)).filter((x) => x._1 > 1).filter((x) => x._2.equals("testa"))
     reducedStream.print()
-    reducedStream.saveAsTextFiles("./out/resulted")
+    reducedStream.saveAsTextFiles("./spark/mySpark/out/resulted")
     ssc.start()
 
     val seq = conn()
