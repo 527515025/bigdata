@@ -7,6 +7,7 @@ object MySpark {
 
   def main(args: Array[String]) {
     val conf = new SparkConf().setAppName("MySpark")
+    conf.setMaster("local")
     val sc = new SparkContext(conf)
     val rdd = sc.parallelize(List(1, 2, 3, 4, 5, 6)).map(_ * 3)
     val mappedRDD = rdd.filter(_ > 10).collect()
