@@ -11,3 +11,5 @@
  
  flume 自定义正则过滤器（http://blog.csdn.net/u012373815/article/details/54207972）
 
+ tailDirSource 支持读取log4j 的日志文件（解决文件切分问题），实现多文件监控，断点续传。(https://blog.csdn.net/u012373815/article/details/62241528)
+
